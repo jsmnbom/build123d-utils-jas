@@ -1,0 +1,54 @@
+[project]
+name = "build123d-utils-jas"
+version = "0.1.0"
+description = "Personal build123d utilities: fast Shape patching, vendor STEP import caching, assembly helpers, viewer wrappers, FDM printing fixes"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Jasmin Bom", email = "jsmnbom@gmail.com" }]
+keywords = ["build123d", "cad", "3d-printing", "ocp"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Manufacturing",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Multimedia :: Graphics :: 3D Modeling",
+]
+dependencies = [
+  "build123d>=0.11.0",
+  "numpy>=2",
+  "scipy>=1.14",
+]
+
+[project.urls]
+Homepage = "https://github.com/jsmnbom/build123d-utils-jas"
+Repository = "https://github.com/jsmnbom/build123d-utils-jas"
+Issues = "https://github.com/jsmnbom/build123d-utils-jas/issues"
+
+[project.optional-dependencies]
+fasteners = ["bd_warehouse>=0.3"]
+preview = ["ocp-vscode>=4"]
+dev = ["pytest>=8", "ruff>=0.15.16", "cadquery-ocp-stubs>=7.9.3.1.1"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/build123d_utils_jas"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/build123d_utils_jas", "README.md", "LICENSE"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+indent-width = 2
+
+# Develop/test against build123d dev (where the ecosystem is heading);
+# the published package only requires >=0.11.0.
+[tool.uv.sources]
+build123d = { git = "https://github.com/gumyr/build123d", rev = "0f0e021b602e14347cb07d8aad051db0a345650b" }
