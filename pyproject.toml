@@ -1,7 +1,7 @@
 [project]
 name = "build123d-utils-jas"
-version = "0.1.0"
-description = "Personal build123d utilities: fast Shape patching, vendor STEP import caching, assembly helpers, viewer wrappers, FDM printing fixes"
+version = "0.2.0"
+description = "Personal build123d utilities: fast Shape patching, vendor STEP import caching, assembly helpers, viewer wrappers, FDM design helpers (holes, fastener pockets, fits)"
 readme = "README.md"
 requires-python = ">=3.13"
 license = "MIT"
@@ -17,7 +17,7 @@ classifiers = [
   "Topic :: Multimedia :: Graphics :: 3D Modeling",
 ]
 dependencies = [
-  "build123d>=0.11.0",
+  "build123d>=0.13.0",
   "numpy>=2",
   "scipy>=1.14",
 ]
@@ -28,9 +28,9 @@ Repository = "https://github.com/jsmnbom/build123d-utils-jas"
 Issues = "https://github.com/jsmnbom/build123d-utils-jas/issues"
 
 [project.optional-dependencies]
-fasteners = ["bd_warehouse>=0.3"]
+fasteners = ["bd_warehouse>=0.4"]
 preview = ["ocp-vscode>=4"]
-dev = ["pytest>=8", "ruff>=0.15.16", "cadquery-ocp-stubs>=7.9.3.1.1"]
+dev = ["pytest>=8", "ruff>=0.15.16", "cadquery-ocp-stubs>=8.0,<8.1"]
 
 [build-system]
 requires = ["hatchling"]
@@ -49,6 +49,6 @@ testpaths = ["tests"]
 indent-width = 2
 
 # Develop/test against build123d dev (where the ecosystem is heading);
-# the published package only requires >=0.11.0.
+# the published package only requires >=0.13.0.
 [tool.uv.sources]
-build123d = { git = "https://github.com/gumyr/build123d", rev = "0f0e021b602e14347cb07d8aad051db0a345650b" }
+build123d = { git = "https://github.com/gumyr/build123d", rev = "092c40e387e2ed925ff989faeb8bf7a4009524e7" }

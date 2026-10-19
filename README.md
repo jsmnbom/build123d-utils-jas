@@ -8,8 +8,9 @@ uv add build123d-utils-jas            # core
 uv add 'build123d-utils-jas[fasteners,preview]'  # + FastHeatSetNut, + ocp_vscode viewer
 ```
 
-Supports build123d `>=0.11`. Developed and tested against both the latest
-release and a pinned build123d `dev` revision (see `[tool.uv.sources]`).
+Requires build123d `>=0.13` (OCP 8). Developed and tested against both the latest
+release and a pinned build123d `dev` revision (see `[tool.uv.sources]`). The 0.1.x
+series supported build123d 0.11.
 
 ## Modules
 
@@ -72,11 +73,41 @@ re-running a script re-imports nothing that didn't change.
 `init_viewer()` is called, so batch runs and imports never need a viewer.
 Requires the `preview` extra when actually used.
 
-### `printing` — FDM printability
+### `printing` — design-for-printing helpers
 
-`fix_horizontal_holes(shape)` finds horizontal-ish cylindrical/conical bores
-and cuts their tops into self-supporting flat-roof teardrops, leaving the
-load-bearing part of the bore round.
+Cutters for holes, fastener pockets and fits, with numbers chosen so FDM parts
+work without test prints (0.4 nozzle / 0.2 layer, +Z is the print direction).
+
+```python
+from build123d_utils_jas import printing
+
+part -= Pos(x, y, top) * printing.heatset_pocket("M3", screw_depth=4)
+part -= Pos(x, y, top) * printing.nut_trap("M4", slot=12)
+with BuildPart() as bp:
+  ...
+  insert(Pos(x, y, top) * printing.hole_vertical(printing.bore_d(5), 10), mode=Mode.SUBTRACT)
+```
+
+Every helper returns a cutter to subtract, with its mouth at the origin cutting
+toward −Z (or −X for `horizontal=True`, teardrop tip up). Exceptions: `mouse_ear`
+is added, `foot_chamfer` and `fix_horizontal_holes` return the modified part, and
+`counterbore_up` opens toward the bed and cuts +Z.
+
+| Group | Helpers |
+|---|---|
+| numbers | `bore_d`, `clearance_d`, `screw_into_plastic_d`, `thread_forming_d`, `snap_cantilever`; tables `NUT`, `CLEARANCE`, `TAP_DRILL`, `HEATSET`, `SNAP_STRAIN` |
+| holes | `hole_vertical` (seam tip), `hole_horizontal` (teardrop), `clearance_hole` |
+| fasteners | `heatset_pocket`, `nut_trap`, `counterbore_up` (bridge trick, opens downward) |
+| fits | `crush_rib_bore`, `hex_press_hole` |
+| misc | `zip_tie_channel`, `mouse_ear`, `foot_chamfer` |
+| finished geometry | `fix_horizontal_holes(shape)` turns existing horizontal-ish round bores into flat-roof teardrops |
+| building blocks | `teardrop_sketch`, `cut_into`, `teardrop_wire`, `bore_geometry` |
+
+All defaults live in `printing.Params`: `printing.P` is the default and
+`printing.ABS` adds XY shrink compensation for bores that take bought parts
+(`bore_d(22, gap=0, p=printing.ABS)`). Other processes get a preset via
+`dataclasses.replace(printing.P, ...)`. The module docstring lists which helpers
+are FDM-only (teardrops, seam tips, the bridge trick, mouse ears, foot chamfer).
 
 ### `fasteners` — `FastHeatSetNut`
 

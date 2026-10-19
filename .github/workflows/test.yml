@@ -12,8 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         build123d:
-          - "build123d==0.11.1"
-          - "build123d @ git+https://github.com/gumyr/build123d@0f0e021b602e14347cb07d8aad051db0a345650b"
+          - "build123d==0.13.0"
+          - "build123d @ git+https://github.com/gumyr/build123d@092c40e387e2ed925ff989faeb8bf7a4009524e7"
     steps:
       - uses: actions/checkout@v4
 

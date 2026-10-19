@@ -3,6 +3,10 @@
 Everything except ``FastHeatSetNut`` is importable without the optional extras;
 ``FastHeatSetNut`` needs the ``fasteners`` extra (bd_warehouse) and is loaded
 lazily so the base package works without it.
+
+The design-for-printing helpers (holes, fastener pockets, fits, tables) stay
+namespaced: ``from build123d_utils_jas import printing``. Only
+``fix_horizontal_holes`` is re-exported here.
 """
 
 from .assembly import find_part, make_compound
